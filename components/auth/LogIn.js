@@ -16,7 +16,8 @@ export default class  LogIn extends Component {
           email_valid: true,
           password: '',
           login_failed: false,
-          loading: false,       
+          loading: false,
+          id:'',    
         };
       }
       validateEmail(email) {
@@ -30,7 +31,10 @@ export default class  LogIn extends Component {
         firebaseApp.auth().signInWithEmailAndPassword(email,password)
         .then(()=>{
         this.setState({error:'',loading:false})
+        const index=firebaseApp.auth().currentUser.uid
+        Actions.push('Account',{index})
         Actions.home();
+        
       })
       .catch(()=>{
           this.setState({error:'authentication failed',loading:false})

@@ -16,14 +16,8 @@ import { Input, Button, Icon } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import {firebaseApp} from '../Fireconfig';
 const BG_IMAGE = require('../assets/bg_screen1.jpg');
-// Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
-
-//const USER_COOL = require('../assets/galaxy-eyes.png');
-//const USER_STUDENT = require('../../../assets/images/user-student.png');
-//const USER_HP = require('../../../assets/images/user-hp.png');
-
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -56,6 +50,12 @@ export default class Signup extends Component {
         const {email,password}=this.state;
         firebaseApp.auth().createUserWithEmailAndPassword(email,password)
         .then(()=>{
+          firebaseApp
+          .ref('users/'+firebaseApp.auth().currentUser.uid+"/profile")
+          .set({
+            UserName:'',
+            UserEmail:email,
+          })
         this.setState({error:'',loading:false})
         Actions.home();
       })
@@ -84,7 +84,7 @@ export default class Signup extends Component {
     return passwordValid;
   }
   gotoSignIN(){
-    Actions.Login()
+    Actions.pop()
   }
 
   validateConfirmationPassword() {
